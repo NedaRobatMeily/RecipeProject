@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
-class MealsModule {
+class MealsServiceModule {
     @Provides
     @Singleton
     fun provideMealsService(retrofit: Retrofit): MealsService {

@@ -56,11 +56,11 @@ internal class MealAdapter(private val listener: MealClickedAdapter) :
         private var meal: Meal? = null
         fun bind(meal: Meal) {
             this.meal = meal
-            tv_meal_name.text = meal?.recipe.label
+            tv_meal_name.text = meal.recipe.label
         }
 
         init {
-            itemView.setOnClickListener { v: View? ->
+            itemView.setOnClickListener {
                 if (meal != null) {
                     listener.onMealClicked(meal!!)
                 }

@@ -38,7 +38,6 @@ ext {
     rxJavaVersion = '2.1.4'
     rxAndroidVersion = '2.0.1'
     rxRelayVersion = '2.0.0'
-    conductorVersion = '2.1.4'
     navVersion = '2.2.0-beta01'
     mockitoVersion = '3.0.0'
 }

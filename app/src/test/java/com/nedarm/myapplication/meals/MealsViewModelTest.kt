@@ -1,28 +1,36 @@
 package com.nedarm.myapplication.meals
 
 import com.nedarm.myapplication.R
+import com.nedarm.myapplication.data.MealsRequester
 import com.nedarm.myapplication.data.MealsResponse
 import com.nedarm.myapplication.testutils.TestUtils
 import com.nedarm.myapplication.ui.meals.MealsViewModel
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
 import java.io.IOException
 import java.util.*
 
+
 class MealsViewModelTest {
 
-    private lateinit var mealPlanViewModel: MealsViewModel
+    private lateinit var mealsViewModel: MealsViewModel
+
+    @Mock
+    internal lateinit var mealsRequester: MealsRequester
 
     @Before
     fun setUp() {
-        mealPlanViewModel = MealsViewModel()
+        MockitoAnnotations.initMocks(this)
+        mealsViewModel = MealsViewModel(mealsRequester = mealsRequester)
     }
 
     @Test
     fun loading() {
-        val loadingObserver = mealPlanViewModel.loading().test()
-        mealPlanViewModel.loadingUpdated().accept(true)
-        mealPlanViewModel.loadingUpdated().accept(false)
+        val loadingObserver = mealsViewModel.loading().test()
+        mealsViewModel.loadingUpdated().accept(true)
+        mealsViewModel.loadingUpdated().accept(false)
 
         loadingObserver.assertValues(true, false)
     }
@@ -30,17 +38,17 @@ class MealsViewModelTest {
     @Test
     fun meals() {
         val response = TestUtils.loadJson("src/test/resources/mock/meals_response.json", MealsResponse::class.java)
-        mealPlanViewModel.mealsUpdated().accept(response!!.meals)
-        mealPlanViewModel.meals().test().assertValue(response.meals)
+        mealsViewModel.mealsUpdated().accept(response!!.meals)
+        mealsViewModel.meals().test().assertValue(response.meals)
     }
 
     @Test
     fun error() {
-        val errorObserver = mealPlanViewModel.error().test()
-        mealPlanViewModel.onError().accept(IOException())
-        mealPlanViewModel.mealsUpdated().accept(Collections.emptyList())
+        val errorObserver = mealsViewModel.error().test()
+        mealsViewModel.onError().accept(IOException())
+        mealsViewModel.mealsUpdated().accept(Collections.emptyList())
 
         //Assert that first an error was emitted, followed by success
-        errorObserver.assertValues(R.string.api_error_repos, -1)
+        errorObserver.assertValues(R.string.api_error_meals, -1)
     }
 }
